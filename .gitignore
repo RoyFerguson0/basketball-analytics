@@ -1,0 +1,22 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+uv.lock
+.python-version
+.idea
+.vscode
+NOTES.txt
+runs
+.env
+Basketball-Players-17*
+models/*
+output_videos/*
+!.gitkeep
+yolo26x.pt
