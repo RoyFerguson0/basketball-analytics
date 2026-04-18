@@ -1,25 +1,15 @@
 import torch
 from ultralytics import YOLO
+from utils import read_video, save_video
 
 
 def main():
-    device = "cuda:0" if torch.cuda.is_available() else "cpu"
-    print(f"Using device: {device}")
 
-    # model = YOLO("models/yolo26x.pt")
-    model = YOLO("models/detector.pt")
+    # Read video
+    video_frames = read_video("input_videos/video_1.mp4")
 
-    results = model.predict(
-        source="input_videos/video_1.mp4",
-        save=True,
-        device=device
-    )
-
-    print(results)
-
-    print("---------")
-    for box in results[0].boxes:
-        print(box)
+    # Save Video
+    save_video(video_frames, "output_videos/video_1_output.mp4")
 
 
 if __name__ == "__main__":
