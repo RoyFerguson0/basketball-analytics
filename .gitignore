@@ -20,3 +20,4 @@ models/*
 output_videos/*
 !.gitkeep
 yolo26x.pt
+stubs/*
