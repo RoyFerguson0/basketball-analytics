@@ -56,7 +56,8 @@ class PlayerTracker:
 
         tracks = read_stub(read_from_stub, stub_path)
         if tracks:
-            if len(tracks) != len(frames):
+            if len(tracks) == len(frames):
+                print("Reading from stub file [Player].")
                 return tracks
 
         detections = self.detect_frames(frames)
