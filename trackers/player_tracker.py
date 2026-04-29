@@ -22,7 +22,7 @@ class PlayerTracker:
 
     def detect_frames(self, frames):
         """ 
-        Detect players is a sequence of video frames using the YOLO model while batch processing.
+        Detect players in a sequence of video frames using the model while batch processing.
 
         Args:
             frames (list): A list of video frames, where each frame is a numpy array.

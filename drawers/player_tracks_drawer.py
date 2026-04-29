@@ -3,12 +3,21 @@ from drawers import draw_ellipse
 
 class PlayerTracksDrawer:
     """ 
-    TODO - Docs
+    A class responsible for drawing the player tracks and ball possession indicators on the video frames.
+
+    Attributes:
+        default_player_team_id (int): The default team ID to assign to a player if their team cannot be determined.
+        team_1_colour (list): The BGR colour to use for players assigned to team 1.
+        team_2_colour (list): The BGR colour to use for players assigned to team 2.
     """
 
     def __init__(self, team_1_colour=[255, 245, 238], team_2_colour=[128, 0, 0]):
         """ 
-        TODO - Docs
+        Initialize the PlayerTracksDrawer instance with the specified team colours.
+
+        Args:
+            team_1_colour (list): The BGR colour to use for players assigned to team 1. Defaults to [255, 245, 238].
+            team_2_colour (list): The BGR colour to use for players assigned to team 2. Defaults to [128, 0, 0].
         """
         self.default_player_team_id = 1
 
@@ -17,7 +26,15 @@ class PlayerTracksDrawer:
 
     def draw(self, video_frames, tracks, player_assignment):
         """ 
-        TODO - Docs
+        Draws the player tracks and ball possession indicators on each video frame.
+
+        Args:
+            video_frames (list): A list of video frames (images) to draw on.
+            tracks (list): A list of dictionaries containing the player tracking information for each corresponding frame.
+            player_assignment (list): A list of dictionaries indicating the team assignment for each player in the corresponding frame.
+
+        Returns:
+            list: A list of video frames with the player tracks and ball possession indicators drawn on them.
         """
         output_video_frames = []
         for frame_num, frame in enumerate(video_frames):

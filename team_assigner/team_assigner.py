@@ -6,12 +6,19 @@ from utils import read_stub, save_stub
 
 class TeamAssigner:
     """
-    TODO - Docs
+    A class that assigns players to teams based on the colour of their jersey colours using visual analysis.
+
+    The class uses a pre-trained vision model to classify players into teams based on their appearance in the video frames. Maintains a consistent team assignment for each player across frames.
+
+    Attributes:
+        player_team_dict (dict): A dictionary mapping player IDs to their assigned team IDs.
+        team_1_class_name (str): The class name representing the first team's jersey colour.
+        team_2_class_name (str): The class name representing the second team's jersey colour.
     """
 
     def __init__(self, team_1_class_name="white shirt", team_2_class_name="dark blue shirt"):
         """
-        TODO - Docs
+        Initializes that TeamAssigner with the specified team jersey descriptions.
         """
         self.player_team_dict = {}
 
@@ -20,7 +27,7 @@ class TeamAssigner:
 
     def load_model(self):
         """
-        TODO - Docs
+        Loads the pre-trained vision model and processor for classifying player jersey colours.
         """
         self.model = CLIPModel.from_pretrained("patrickjohncyh/fashion-clip")
         self.processor = CLIPProcessor.from_pretrained(
@@ -28,7 +35,14 @@ class TeamAssigner:
 
     def get_player_colour(self, frame, bbox):
         """
-        TODO - Docs
+        Analyses the players jersey colour within the specified bounding box in the given video frame and classifies it as either team 1 or team 2 based on the pre-trained model's predictions.
+
+        Args:
+            frame (numpy.ndarray): The video frame containing the player.
+            bbox (tuple): The bounding box coordinates (x1, y1, x2, y2) for the player in the frame.
+
+        Returns:
+            str: The classified team jersey colour/description.
         """
         image = frame[int(bbox[1]):int(bbox[3]), int(bbox[0]):int(bbox[2])]
 
@@ -54,7 +68,15 @@ class TeamAssigner:
 
     def get_player_team(self, frame, player_bbox, player_id):
         """
-        TODO - Docs
+        Get the team assignment for a player, using the cached results if available.
+
+        Args:
+            frame (numpy.ndarray): The video frame containing the player.
+            player_bbox (tuple): The bounding box coordinates (x1, y1, x2, y2) for the player in the frame.
+            player_id (int): The Unique Identifier of the player.
+
+        Returns:
+            int: The assigned team ID (1 or 2).
         """
 
         if player_id in self.player_team_dict:
@@ -72,7 +94,16 @@ class TeamAssigner:
 
     def get_player_teams_across_frames(self, video_frames, player_tracks, read_from_stub=False, stub_path=None):
         """
-        TODO - Docs
+        Processes all video frames and assigns teams to players across frames, with optional caching.
+
+        Args:
+            video_frames (list): List of video frames to process.
+            player_tracks (list): List of dictionaries containing player tracking information for each frame.
+            read_from_stub (bool, optional): Whether to read cached team assignments from a stub file.
+            stub_path (str, optional): The file path for the stub file to read from or write to. 
+
+        Returns:
+            list: A list of dictionaries mapping player IDs to team IDs for each frame.
         """
 
         player_assignment = read_stub(

@@ -7,18 +7,29 @@ import pandas as pd
 
 class BallTracker:
     """ 
-    TODO - Docs
+    A class that handles basketball detection and tracking using YOLO.
+
+    This class provides methods to detect the basketball in video frames, process the detections in batches for improved performance and refine the tracking results throughout filtering and interpolation.
     """
 
     def __init__(self, model_path: str):
         """ 
-        TODO - Docs
+        Initializes the BallTracker with the specified YOLO model path.
+
+        Args:
+            model_path (str): The file path to the YOLO model weights for basketball detection.
         """
         self.model = YOLO(model_path)
 
     def detect_frames(self, frames):
         """ 
-        TODO - Docs
+        Detect the basketball in a sequence of video frames using the model while batch processing.
+
+        Args:
+            frames (list): A list of video frames, where each frame is a numpy array.
+
+        Returns:
+            list: YOLO detection results for each frame.
         """
         batch_size = 20
         detections = []
@@ -31,7 +42,15 @@ class BallTracker:
 
     def get_object_tracks(self, frames, read_from_stub=False, stub_path=None):
         """ 
-        TODO - Docs
+        Get basketball tracking results for a sequence of video frames with optional caching.
+
+        Args:
+            frames (list): A list of video frames, where each frame is a numpy array.
+            read_from_stub (bool, optional): Whether to read detections from a cached stub file. Defaults to False.
+            stub_path (str, optional): The file path to the cached stub file containing detections. Required if read_from_stub is True.
+
+        Returns:
+            list: List of dictionaries containing basketball tracking information for each frame.
         """
 
         tracks = read_stub(read_from_stub, stub_path)
@@ -79,7 +98,13 @@ class BallTracker:
 
     def remove_wrong_detections(self, ball_positions):
         """ 
-        TODO - Docs
+        Filter out wrong basketball detections based on the maximum distance movement allowed between frames, which is adjusted based on the number of frames between detections.
+
+        Args:
+            ball_postions (list): A list of detected ball positions across frames.
+
+        Returns:
+            list: A list of ball positions with wrong detections removed/filtered out.
         """
         maximum_allowed_distance = 25
         last_good_frame_index = -1
@@ -111,7 +136,13 @@ class BallTracker:
 
     def interpolate_ball_positions(self, ball_positions):
         """ 
-        TODO - Docs
+        Interpolate missing ball positions across frames to create smooth tracking results.
+
+        Args:
+            ball_positions (list): A list of detected ball positions across frames, which may contain missing values.
+
+        Returns:
+            list: A list of ball positions with missing values interpolated for smoother tracking (Filling in the gaps).
         """
         ball_positions = [x.get(1, {}).get('bbox', []) for x in ball_positions]
 
