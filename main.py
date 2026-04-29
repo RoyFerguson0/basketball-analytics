@@ -5,6 +5,7 @@ from ultralytics import YOLO
 from utils import read_video, save_video
 from trackers import PlayerTracker, BallTracker
 from drawers import PlayerTracksDrawer, BallTracksDrawer
+from team_assigner import TeamAssigner
 
 
 def main():
@@ -35,6 +36,15 @@ def main():
     # Interpolate ball tracks
     ball_tracks = ball_tracker.interpolate_ball_positions(ball_tracks)
 
+    # Assign Player Teams
+    team_assigner = TeamAssigner()
+    player_assignment = team_assigner.get_player_teams_across_frames(
+        video_frames=video_frames,
+        player_tracks=player_tracks,
+        read_from_stub=True,
+        stub_path="stubs/player_assignment_stubs.pkl"
+    )
+
     # Draw Output
     # Initialise Drawers
     player_tracks_drawer = PlayerTracksDrawer()
@@ -43,7 +53,8 @@ def main():
     # Draw Players Tracks
     output_video_frames = player_tracks_drawer.draw(
         video_frames=video_frames,
-        tracks=player_tracks
+        tracks=player_tracks,
+        player_assignment=player_assignment
     )
 
     # Draw Ball Tracks
