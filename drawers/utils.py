@@ -61,7 +61,7 @@ def draw_triangle(frame, bbox, colour, conf=None):
     return frame
 
 
-def draw_ellipse(frame, bbox, colour, track_id=None, conf=None):
+def draw_ellipse(frame, bbox, colour, track_id=None, conf=None, team=None):
     """ 
     Draws an ellipse on the given video frame at the specified bounding box location with option to display track ID and confidence.
 
@@ -71,6 +71,7 @@ def draw_ellipse(frame, bbox, colour, track_id=None, conf=None):
         colour (tuple): The colour of the ellipse in BGR format.
         track_id (int, optional): The ID of the track to display near the ellipse. Defaults to None.
         conf (float, optional): The confidence score to display near the ellipse. Defaults to None.
+        team (int, optional): The team ID to display near the ellipse. Defaults to None.
 
     Returns:
         numpy.ndarray: The video frame with the ellipse and optional track ID and confidence drawn on it.
@@ -118,6 +119,17 @@ def draw_ellipse(frame, bbox, colour, track_id=None, conf=None):
             cv2.FONT_HERSHEY_SIMPLEX,
             0.6,
             (0, 0, 0),
+            2
+        )
+
+    if team:
+        cv2.putText(
+            frame,
+            f"T{team} ID:{track_id}",
+            (int(bbox[0]), max(20, int(bbox[1]) - 10)),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.5,
+            colour,
             2
         )
 

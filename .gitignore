@@ -16,6 +16,7 @@ NOTES.txt
 runs
 .env
 Basketball-Players-17*
+reloc2-1*
 models/*
 output_videos/*
 !.gitkeep

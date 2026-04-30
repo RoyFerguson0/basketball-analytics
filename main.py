@@ -6,6 +6,7 @@ from utils import read_video, save_video
 from trackers import PlayerTracker, BallTracker
 from drawers import PlayerTracksDrawer, BallTracksDrawer
 from team_assigner import TeamAssigner
+from ball_aquisition import BallAquisitionDetector
 
 
 def main():
@@ -45,6 +46,13 @@ def main():
         stub_path="stubs/player_assignment_stubs.pkl"
     )
 
+    # Ball Aquisition
+    ball_aquisition_detector = BallAquisitionDetector()
+    ball_aquisition = ball_aquisition_detector.detect_ball_possession(
+        player_tracks=player_tracks,
+        ball_tracks=ball_tracks
+    )
+
     # Draw Output
     # Initialise Drawers
     player_tracks_drawer = PlayerTracksDrawer()
@@ -54,7 +62,8 @@ def main():
     output_video_frames = player_tracks_drawer.draw(
         video_frames=video_frames,
         tracks=player_tracks,
-        player_assignment=player_assignment
+        player_assignment=player_assignment,
+        ball_aquisition=ball_aquisition
     )
 
     # Draw Ball Tracks
