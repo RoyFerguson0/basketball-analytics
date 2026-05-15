@@ -5,9 +5,10 @@ from ultralytics import YOLO
 from court_keypoint_detector import CourtKeypointDetector
 from utils import read_video, save_video
 from trackers import PlayerTracker, BallTracker
-from drawers import PlayerTracksDrawer, BallTracksDrawer, CourtKeypointDrawer
+from drawers import PlayerTracksDrawer, BallTracksDrawer, CourtKeypointDrawer, TacticalViewDrawer
 from team_assigner import TeamAssigner
 from ball_aquisition import BallAquisitionDetector
+from tactical_view_converter import TacticalViewConverter
 
 
 def main():
@@ -62,11 +63,16 @@ def main():
         ball_tracks=ball_tracks
     )
 
+    # Tactical View Converter
+    tactical_view_converter = TacticalViewConverter(
+        court_image_path="./images/basketball_court.png")
+
     # Draw Output
     # Initialise Drawers
     player_tracks_drawer = PlayerTracksDrawer()
     ball_tracks_drawer = BallTracksDrawer()
     court_keypoint_drawer = CourtKeypointDrawer()
+    tactical_view_drawer = TacticalViewDrawer()
 
     # Draw Players Tracks
     output_video_frames = player_tracks_drawer.draw(
@@ -86,6 +92,15 @@ def main():
     output_video_frames = court_keypoint_drawer.draw(
         frames=output_video_frames,
         court_keypoints=court_keypoints_per_frame
+    )
+
+    # Draw Tactical View
+    output_video_frames = tactical_view_drawer.draw(
+        video_frames=output_video_frames,
+        court_image_path=tactical_view_converter.court_image_path,
+        width=tactical_view_converter.width,
+        height=tactical_view_converter.height,
+        tactical_court_keypoints=tactical_view_converter.key_points
     )
 
     # Save Video
