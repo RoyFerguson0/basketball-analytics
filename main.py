@@ -35,7 +35,7 @@ def main():
         stub_path="stubs/ball_track_stubs.pkl"
     )
 
-    court_keypoints_per_frame = court_keypoint_detect.get_court_keypoints(
+    court_keypoints = court_keypoint_detect.get_court_keypoints(
         frames=video_frames,
         read_from_stub=False,
         stub_path="stubs/court_keypoint_stubs.pkl"
@@ -66,6 +66,8 @@ def main():
     # Tactical View Converter
     tactical_view_converter = TacticalViewConverter(
         court_image_path="./images/basketball_court.png")
+    court_keypoints = tactical_view_converter.validate(
+        court_keypoints)
 
     # Draw Output
     # Initialise Drawers
@@ -91,7 +93,7 @@ def main():
     # Draw Court Keypoints
     output_video_frames = court_keypoint_drawer.draw(
         frames=output_video_frames,
-        court_keypoints=court_keypoints_per_frame
+        court_keypoints=court_keypoints
     )
 
     # Draw Tactical View
