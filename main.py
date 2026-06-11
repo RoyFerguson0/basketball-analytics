@@ -1,5 +1,4 @@
 import os
-
 import torch
 from ultralytics import YOLO
 from court_keypoint_detector import CourtKeypointDetector
@@ -9,12 +8,13 @@ from drawers import PlayerTracksDrawer, BallTracksDrawer, CourtKeypointDrawer, T
 from team_assigner import TeamAssigner
 from ball_aquisition import BallAquisitionDetector
 from tactical_view_converter import TacticalViewConverter
+from speed_and_distance_calculator import SpeedAndDistanceCalculator
 
 
 def main():
 
     # Read video
-    video_frames = read_video("input_videos/video_3.mp4")
+    video_frames = read_video("input_videos/video_1.mp4")
 
     # Initialise Tracker
     player_tracker = PlayerTracker("models/detector.pt")
@@ -70,6 +70,22 @@ def main():
         court_keypoints)
     tactical_player_positions = tactical_view_converter.transform_players_to_tactical_view(
         court_keypoints, player_tracks)
+
+    # Speed and Distance Calculator
+    speed_and_distance_calculator = SpeedAndDistanceCalculator(
+        tactical_view_converter.width,
+        tactical_view_converter.height,
+        tactical_view_converter.actual_width_in_meters,
+        tactical_view_converter.actual_height_in_meters
+    )
+    player_distance_per_frame = speed_and_distance_calculator.calculate_distance(
+        tactical_player_positions)
+    player_speed_per_frame = speed_and_distance_calculator.calculate_speed(
+        player_distance_per_frame
+    )
+
+    print("Player Distance Per Frame:", player_distance_per_frame)
+    print("Player Speed Per Frame:", player_speed_per_frame)
 
     # Draw Output
     # Initialise Drawers
