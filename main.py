@@ -4,17 +4,18 @@ from ultralytics import YOLO
 from court_keypoint_detector import CourtKeypointDetector
 from utils import read_video, save_video
 from trackers import PlayerTracker, BallTracker
-from drawers import PlayerTracksDrawer, BallTracksDrawer, CourtKeypointDrawer, TacticalViewDrawer
+from drawers import PlayerTracksDrawer, BallTracksDrawer, CourtKeypointDrawer, TacticalViewDrawer, SpeedAndDistanceDrawer, PassInterceptionDrawer
 from team_assigner import TeamAssigner
 from ball_aquisition import BallAquisitionDetector
 from tactical_view_converter import TacticalViewConverter
 from speed_and_distance_calculator import SpeedAndDistanceCalculator
+from pass_and_interception_detector import PassAndInterceptionDetector
 
 
 def main():
 
     # Read video
-    video_frames = read_video("input_videos/video_1.mp4")
+    video_frames = read_video("input_videos/video_3.mp4")
 
     # Initialise Tracker
     player_tracker = PlayerTracker("models/detector.pt")
@@ -63,6 +64,17 @@ def main():
         ball_tracks=ball_tracks
     )
 
+    # Pass and Interception Detection
+    pass_and_interception_detector = PassAndInterceptionDetector()
+    passes = pass_and_interception_detector.detect_passes(
+        ball_aquisition=ball_aquisition,
+        player_assignment=player_assignment
+    )
+    interceptions = pass_and_interception_detector.detect_interceptions(
+        ball_aquisition=ball_aquisition,
+        player_assignment=player_assignment
+    )
+
     # Tactical View Converter
     tactical_view_converter = TacticalViewConverter(
         court_image_path="./images/basketball_court.png")
@@ -84,15 +96,14 @@ def main():
         player_distance_per_frame
     )
 
-    print("Player Distance Per Frame:", player_distance_per_frame)
-    print("Player Speed Per Frame:", player_speed_per_frame)
-
     # Draw Output
     # Initialise Drawers
     player_tracks_drawer = PlayerTracksDrawer()
     ball_tracks_drawer = BallTracksDrawer()
     court_keypoint_drawer = CourtKeypointDrawer()
     tactical_view_drawer = TacticalViewDrawer()
+    speed_and_distance_drawer = SpeedAndDistanceDrawer()
+    pass_and_interception_drawer = PassInterceptionDrawer()
 
     # Draw Players Tracks
     output_video_frames = player_tracks_drawer.draw(
@@ -112,6 +123,19 @@ def main():
     output_video_frames = court_keypoint_drawer.draw(
         frames=output_video_frames,
         court_keypoints=court_keypoints
+    )
+
+    output_video_frames = pass_and_interception_drawer.draw(
+        video_frames=output_video_frames,
+        passes=passes,
+        interceptions=interceptions
+    )
+
+    output_video_frames = speed_and_distance_drawer.draw(
+        video_frames=output_video_frames,
+        player_tracks=player_tracks,
+        player_distances_per_frame=player_distance_per_frame,
+        player_speeds_per_frame=player_speed_per_frame
     )
 
     # Draw Tactical View
