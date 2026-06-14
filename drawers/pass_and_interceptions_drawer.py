@@ -82,7 +82,7 @@ class PassInterceptionDrawer:
             org=(text_x, text_y2),
             fontFace=cv2.FONT_HERSHEY_SIMPLEX,
             fontScale=font_scale,
-            color=(0, 0, 0),
+            color=(255, 0, 0),
             thickness=font_thickness
         )
 

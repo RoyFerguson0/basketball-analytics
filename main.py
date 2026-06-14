@@ -1,4 +1,5 @@
 import os
+from drawers.team_ball_control_drawer import TeamBallControlDrawer
 import torch
 from ultralytics import YOLO
 from court_keypoint_detector import CourtKeypointDetector
@@ -104,6 +105,7 @@ def main():
     tactical_view_drawer = TacticalViewDrawer()
     speed_and_distance_drawer = SpeedAndDistanceDrawer()
     pass_and_interception_drawer = PassInterceptionDrawer()
+    team_ball_control_drawer = TeamBallControlDrawer()
 
     # Draw Players Tracks
     output_video_frames = player_tracks_drawer.draw(
@@ -125,12 +127,21 @@ def main():
         court_keypoints=court_keypoints
     )
 
+    # Draw Team Ball Control
+    output_video_frames = team_ball_control_drawer.draw(
+        video_frames=output_video_frames,
+        player_assignment=player_assignment,
+        ball_aquisition=ball_aquisition
+    )
+
+    # Draw Passes and Interceptions
     output_video_frames = pass_and_interception_drawer.draw(
         video_frames=output_video_frames,
         passes=passes,
         interceptions=interceptions
     )
 
+    # Draw Speed and Distance
     output_video_frames = speed_and_distance_drawer.draw(
         video_frames=output_video_frames,
         player_tracks=player_tracks,
@@ -151,7 +162,10 @@ def main():
     )
 
     # Save Video
-    save_video(output_video_frames, "output_videos/video_output.mp4")
+    save_video(
+        output_video_frames=output_video_frames, 
+        output_video_path="output_videos/video_output.mp4"
+    )
 
 
 if __name__ == "__main__":
