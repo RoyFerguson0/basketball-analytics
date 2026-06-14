@@ -19,6 +19,7 @@ Basketball-Players-17*
 reloc2-1*
 models/*
 output_videos/*
-!.gitkeep
+input_videos/*
 yolo26x.pt
 stubs/*
+!.gitkeep
