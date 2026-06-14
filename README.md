@@ -6,9 +6,9 @@ This repository is designed to show an end-to-end applied Computer Vision workfl
 
 ## Demo Video
 
-**[Watch the demo video](assets/quick_demo_vid.mp4)**
+**[Watch the demo video](assets/demo_vid.mp4)**
 
-[![Watch the demo](assets/thumbnail.png)](assets/quick_demo_vid.mp4)
+[![Watch the demo](assets/thumbnail.png)](assets/demo_vid.mp4)
 
 ## What the Project Does
 
